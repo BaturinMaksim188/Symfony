@@ -45,4 +45,28 @@ class DevController extends AbstractController
 
         return new Response('Поле имени из записи №'.$product->getId().":   Имя: ".$product->getName().", Позиция: ".$product->getPosition().", Навыки: ".$product->getSkills());
     }
+
+    /**
+     * @Route("/getall", name="outAll")
+     */
+    public function funcOutAll()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $product = $this->getDoctrine()
+            ->getRepository(Developer::class)
+            ->findAllInFetch();
+
+        if (!$product) {
+            throw $this->createNotFoundException(
+                'База данных пустая!'
+            );
+        }
+
+        // !!!Неясная ошибка "Object of class App\Entity\Developer could not be converted to string"!!!!!!!!!!!!!!!!!!!!!
+        // !!!echo twig_escape_filter($this->env, $context["name"], "html", null, true);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!Использовались разные способы и методы, требуется изучение возвращаемого объекта и синтаксиса массивов!!!!!
+
+        return $this->render('dev\send.html.twig', array('data'=>$product));
+    }
 }

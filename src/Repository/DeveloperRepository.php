@@ -19,6 +19,22 @@ class DeveloperRepository extends ServiceEntityRepository
         parent::__construct($registry, Developer::class);
     }
 
+    /**
+     * @return All[]
+     */
+    public function findAllInFetch(): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Developer p
+            ORDER BY p.id ASC'
+        );
+
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Developer[] Returns an array of Developer objects
     //  */
