@@ -19,8 +19,8 @@ class DevController extends AbstractController
 
         $product = new Developer();
         $product->setName('Максим');
-        $product->setPosition('Джуниор');
-        $product->setSkills('Чистый код');
+        $product->setPosition('Миддл');
+        $product->setSkills('Быстрота написания, чистый код');
 
         $entityManager->persist($product);
         $entityManager->flush();
@@ -29,10 +29,20 @@ class DevController extends AbstractController
     }
 
     /**
-     * @Route("/get", name="out")
+     * @Route("/get/{id}", name="out")
      */
-    public function funcOut(): Response
+    public function funcOut(int $id): Response
     {
-        return $this->render('dev/send.html.twig');
+        $product = $this->getDoctrine()
+            ->getRepository(Developer::class)
+            ->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException(
+                'Не найдено записи №'.$id
+            );
+        }
+
+        return new Response('Поле имени из записи №'.$product->getId().":   Имя: ".$product->getName().", Позиция: ".$product->getPosition().", Навыки: ".$product->getSkills());
     }
 }
