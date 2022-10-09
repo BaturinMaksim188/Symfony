@@ -52,6 +52,7 @@ class DevController extends AbstractController
     public function funcOutAll()
     {
         $entityManager = $this->getDoctrine()->getManager();
+        $myArray = [];
 
         $product = $this->getDoctrine()
             ->getRepository(Developer::class)
@@ -60,13 +61,28 @@ class DevController extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException(
                 'База данных пустая!'
-            );
-        }
+            ); }
 
+
+        $i = -1;
+        $secondArray = [];
+        while ($i <= count($product)) {
+            ++$i;
+            if ($product[$i]) {
+                $secondArray[] = ($product[$i]->getId() . '<br>');
+                $secondArray[] = ($product[$i]->getName() . '<br>');
+                $secondArray[] = ($product[$i]->getPosition() . '<br>');
+                $secondArray[] = ($product[$i]->getSkills() . '<br>');
+                $myArray[] = $secondArray
+                $secondArray ОЧИСТИТЬ
+            }
+        };
         // !!!Неясная ошибка "Object of class App\Entity\Developer could not be converted to string"!!!!!!!!!!!!!!!!!!!!!
         // !!!echo twig_escape_filter($this->env, $context["name"], "html", null, true);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // !!!Использовались разные способы и методы, требуется изучение возвращаемого объекта и синтаксиса массивов!!!!!
 
+        // return $this->render('dev\send.html.twig', 'data'->$product);
+        // return new Response($product);
         return $this->render('dev\send.html.twig', array('data'=>$product));
     }
-}
+};
